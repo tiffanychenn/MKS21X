@@ -1,0 +1,13 @@
+git clone: used to get a repository from github onto your local server
+    -use like this: git clone "url"
+    -get url from repository (upper right hand corner)
+git config: used to set a global variable for github
+    -use like this: git config --global (what you want to set) "what you want to set it as"
+    -what you want to set should look like this: user.name
+git add -A: updates changes to the local repository
+git commit: commits changes to the local repository
+    -you can add a message like this: -m "message"
+git push: 
+git status: checks the status of your changes
+    -red means that you have not added the changes to the repo yet
+    -green means that you have added the changes to the repo
