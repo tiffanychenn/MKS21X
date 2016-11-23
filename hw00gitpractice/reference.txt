@@ -7,7 +7,7 @@ git config: used to set a global variable for github
 git add -A: updates changes to the local repository
 git commit: commits changes to the local repository
     -you can add a message like this: -m "message"
-git push: 
+git push: updates the website
 git status: checks the status of your changes
     -red means that you have not added the changes to the repo yet
-    -green means that you have added the changes to the repo
+    -green means that you have added the changes to the repo but you have not committed them
