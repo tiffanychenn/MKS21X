@@ -1,8 +1,8 @@
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Collections;
 
 public class Library {
-	ArrayList<LibraryBook> bookList;
+	List<LibraryBook> bookList;
   public Library () {
 		bookList = new ArrayList<LibraryBook> ();
 	}

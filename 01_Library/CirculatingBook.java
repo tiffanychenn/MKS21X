@@ -4,6 +4,8 @@ public class CirculatingBook extends LibraryBook{
 
 	public CirculatingBook(String a, String t, String i, String n){
 		super(a, t, i, n);
+		currentHolder = null;
+		dueDate = null;
 	}
 
 	public void setDueDate(String neww){
@@ -43,7 +45,7 @@ public class CirculatingBook extends LibraryBook{
 
     public String toString(){
     	String temp = super.toString();
-    	if (!dueDate.equals(null)){
+    	if (!(dueDate == null)){
     		temp = temp + "\nCurrent Holder: " + currentHolder + "\nDue Date: " + dueDate;
     	}
     	return temp;
