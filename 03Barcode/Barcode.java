@@ -4,55 +4,28 @@ public class Barcode implements Comparable<Barcode>{
     private String _zip;
     private int _checkDigit;
 
+    // here's to the code!!
+    private static final String[] codes = {"||:::", ":::||", "::|:|", "::||:", ":|::|", ":|:|:", ":||::", "|:::|", "|::|:", "|:|::"};
+
     // constructors
-    //precondition: zip.length() = 5 and zip contains only digits.
-    //postcondition: throws a runtime exception zip is not the correct length
+    // precondition: zip.length() = 5 and zip contains only digits.
+    // postcondition: throws a runtime exception zip is not the correct length
     //               or zip contains a non digit
     //               _zip and _checkDigit are initialized.
     
     public Barcode(String zip){
-        _zip = "";
-        if (zip.length() != 5){
-            throw new IllegalArgumentException();
-        }
-        for (int i = 0; i < 5; i ++){
-            if (!((int)(zip.charAt(i)) >= 48 && (int)(zip.charAt(i)) <= 57)){
-                throw new IllegalArgumentException();
-            }
-            else{
-                _zip += key((int)(zip.charAt(i)) - 48);
-            }
-        }
-        _checkDigit = checkSum() % 10;
+        _zip = toCode(zip);
+        _checkDigit = findIndex(_zip.substring(26, 31));
     }
 
     // bunch of private methods
-    private String key(int index){
-        String[] codes = {"||:::", ":::||", "::|:|", "::||:", ":|::|", ":|:|:", ":||::", "|:::|", "|::|:", "|:|::"};
-        return codes[index];
-    }
-
-    private int findIndex(String bleh){
-        String[] codes = {"||:::", ":::||", "::|:|", "::||:", ":|::|", ":|:|:", ":||::", "|:::|", "|::|:", "|:|::"};
+    private static int findIndex(String bleh){
         for (int i = 0; i < codes.length; i ++){
             if (bleh.equals(codes[i])){
-            return i;
+		return i;
             }
         }
         return -1;
-    }
-
-    private int otherThingForInt(){
-        int temp = 0;
-        for (int i = 0; i < _zip.length(); i += 5){
-            temp += findIndex(_zip.substring(i, i + 5));
-        }
-        return temp;
-    }
-
-    // postcondition: Creates a copy of a bar code.
-    public Barcode clone(){
-        return new Barcode(otherThing());
     }
 
     private String otherThing(){
@@ -63,14 +36,27 @@ public class Barcode implements Comparable<Barcode>{
         return temp;
     }
 
+    private int otherThingForInt(){
+        int temp = 0;
+	int counter = 0;
+        for (int i = 0; i < _zip.length(); i += 5){
+            temp += findIndex(_zip.substring(i, i + 5)) * Math.pow(10, 4 - counter);
+        }
+        return temp;
+    }
+
+    // postcondition: Creates a copy of a bar code.
+    public Barcode clone(){
+        return new Barcode(otherThing());
+    }
 
     // postcondition: computes and returns the check sum for _zip
-    private int checkSum(){
+    private static int checkSum(String zip){
         int temp = 0;
-        for (int i = 0; i < _zip.length(); i += 5){
-	    temp += findIndex(_zip.substring(i, i + 5));
+        for (int i = 1; i < 26; i += 5){
+	    temp += findIndex(zip.substring(i, i + 5));
 	}
-	return temp;
+	return temp % 10;
     }
 
     //postcondition: format zip + check digit + barcode 
@@ -79,13 +65,59 @@ public class Barcode implements Comparable<Barcode>{
         String temp = "";
         temp += otherThing();
         temp += _checkDigit;
-        return temp + " " + _zip;
+        return temp + " " +  _zip;
     }
 
 
     // postcondition: compares the zip + checkdigit, in numerical order. 
     public int compareTo(Barcode other){
-        return Integer.compare(otherThingForInt() + _checkDigit, other.otherThingForInt() + other.checkSum() % 10);
+        return Integer.compare(otherThingForInt() + _checkDigit, other.otherThingForInt() + other._checkDigit);
+    }
+
+    public static String toCode(String zip){
+	String temp = "|";
+	if (zip.length() != 5){
+            throw new IllegalArgumentException();
+        }
+        for (int i = 0; i < 5; i ++){
+            if (!((int)(zip.charAt(i)) >= 48 && (int)(zip.charAt(i)) <= 57)){
+                throw new IllegalArgumentException();
+            }
+            else{
+                temp += codes[(int)(zip.charAt(i)) - 48];
+            }
+        }
+	return temp + codes[checkSum(temp)]  + "|";
+    }
+
+    public static String toZip(String code){
+	if (code.length() != 32){
+	    throw new IllegalArgumentException("The barcode is not the corrent length.");
+	}
+	if (code.charAt(0) != '|' || code.charAt(31) != '|'){
+	    throw new IllegalArgumentException("The barcode does not begin and end in |.");
+	}
+	for (int i = 1; i < code.length() - 1; i ++){
+	    if (code.charAt(i) != '|' || code.charAt(i) != ':'){
+		throw new IllegalArgumentException("The barcode has invalid characters (characters that are not | or :).");
+	    }
+	}
+	for (int i = 1; i < code.length() - 6; i += 5){
+	    if (findIndex(code.substring(i, i + 5)) == -1){
+		throw new IllegalArgumentException("The barcode has invalid encoded integers.");
+	    }
+	}
+	int check_sum = checkSum(code);
+	if (findIndex(code.substring(26, 31)) != check_sum){
+	    throw new IllegalArgumentException("The sixth digit does not match the sum of the first five digits modulo 10.");
+	}
+	int temp = 0;
+	int counter = 0;
+	for (int i = 1; i < code.length() - 6; i ++){
+	    temp += findIndex(code.substring(i, i + 5)) * Math.pow(10, 4 - counter);
+	    counter ++;
+	}
+	return String.valueOf(temp);
     }
     
 }

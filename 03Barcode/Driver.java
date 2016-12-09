@@ -7,7 +7,6 @@ public class Driver{
 		System.out.println(c.toString());
 		System.out.println(b.compareTo(c));
 		System.out.println(c.compareTo(b)); // should be negative of the last line
-		System.out.println(d.compareTo(b));
 		Barcode cloned = b.clone();
 		System.out.println(b.compareTo(cloned));
 		// Barcode too_long = new Barcode("18298930"); // should throw a runtime exception
