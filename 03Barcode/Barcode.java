@@ -28,26 +28,9 @@ public class Barcode implements Comparable<Barcode>{
         return -1;
     }
 
-    private String otherThing(){
-        String temp = "";
-        for (int i = 0; i < _zip.length(); i += 5){
-            temp += String.valueOf(findIndex(_zip.substring(i, i + 5)));
-        }
-        return temp;
-    }
-
-    private int otherThingForInt(){
-        int temp = 0;
-	int counter = 0;
-        for (int i = 0; i < _zip.length(); i += 5){
-            temp += findIndex(_zip.substring(i, i + 5)) * Math.pow(10, 4 - counter);
-        }
-        return temp;
-    }
-
     // postcondition: Creates a copy of a bar code.
     public Barcode clone(){
-        return new Barcode(otherThing());
+        return new Barcode(toZip(_zip));
     }
 
     // postcondition: computes and returns the check sum for _zip
@@ -62,26 +45,23 @@ public class Barcode implements Comparable<Barcode>{
     //postcondition: format zip + check digit + barcode 
     //ex. "084518  |||:::|::|::|::|:|:|::::|||::|:|"      
     public String toString(){
-        String temp = "";
-        temp += otherThing();
-        temp += _checkDigit;
-        return temp + " " +  _zip;
+        return toZip(_zip) + _checkDigit + " " +  _zip;
     }
 
 
     // postcondition: compares the zip + checkdigit, in numerical order. 
     public int compareTo(Barcode other){
-        return Integer.compare(otherThingForInt() + _checkDigit, other.otherThingForInt() + other._checkDigit);
+        return Integer.compare(Integer.parseInt(toZip(_zip)) + _checkDigit, Integer.parseInt(toZip(other._zip)) + other._checkDigit);
     }
 
     public static String toCode(String zip){
 	String temp = "|";
 	if (zip.length() != 5){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The length of the inputted string is not equal to 5.");
         }
         for (int i = 0; i < 5; i ++){
             if (!((int)(zip.charAt(i)) >= 48 && (int)(zip.charAt(i)) <= 57)){
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("The string inputted has non-numerical characters.");
             }
             else{
                 temp += codes[(int)(zip.charAt(i)) - 48];
@@ -98,7 +78,7 @@ public class Barcode implements Comparable<Barcode>{
 	    throw new IllegalArgumentException("The barcode does not begin and end in |.");
 	}
 	for (int i = 1; i < code.length() - 1; i ++){
-	    if (code.charAt(i) != '|' || code.charAt(i) != ':'){
+	    if (code.charAt(i) != '|' && code.charAt(i) != ':'){
 		throw new IllegalArgumentException("The barcode has invalid characters (characters that are not | or :).");
 	    }
 	}
@@ -113,7 +93,7 @@ public class Barcode implements Comparable<Barcode>{
 	}
 	int temp = 0;
 	int counter = 0;
-	for (int i = 1; i < code.length() - 6; i ++){
+	for (int i = 1; i < code.length() - 3; i += 5){
 	    temp += findIndex(code.substring(i, i + 5)) * Math.pow(10, 4 - counter);
 	    counter ++;
 	}
