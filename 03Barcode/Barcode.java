@@ -1,4 +1,140 @@
 public class Barcode implements Comparable<Barcode>{
+
+    public static void main(String args[]){
+	Barcode b = new Barcode("08451");
+	System.out.println(b); //084518 |||:::|::|::|::|:|:|::::|||::|:|
+	System.out.println(toZip("|||:::|::|::|::|:|:|::::|||::|:|")+" "+toCode("08451"));//same as above
+	System.out.println(b.toString().compareTo("084518 |||:::|::|::|::|:|:|::::|||::|:|")); //0
+	System.out.println(toCode("08451").compareTo("|||:::|::|::|::|:|:|::::|||::|:|")); //0
+	System.out.println(b.compareTo(b)); //0
+	System.out.println((new Barcode("11426")).compareTo(new Barcode("11426"))); //0
+	System.out.println((new Barcode("99999")).compareTo(b)); //some positive, preferably 1
+	System.out.println((new Barcode("01111")).compareTo(b)); //some negative, preferably -1
+	System.out.println(b.compareTo(new Barcode("01111"))); //some negative, preferably 1
+	System.out.println(b.compareTo(new Barcode("99999"))); //some positive, preferably -1
+	int sum= 0;
+	try{
+	    //length
+	    System.out.println((new Barcode("123456")));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //length
+	    System.out.println(toCode("123456"));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //length
+	    System.out.println((new Barcode("1234")));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //length
+	    System.out.println(toCode("1234"));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //type
+	    System.out.println((new Barcode("12.45")));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //type
+	    System.out.println(toCode("12.45"));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //type
+	    System.out.println((new Barcode("12a45")));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //type
+	    System.out.println(toCode("12a45"));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //type
+	    System.out.println((new Barcode("12/45")));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //type
+	    System.out.println(toCode("12/45"));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //length
+	    System.out.println(toZip("|||:::|:::|::|::|:|:|::::|||::|:|"));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //length
+	    System.out.println(toZip("|||:::|::|::|::||:|::::|||::|:|"));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //nonbarcode char were used
+	    System.out.println(toZip("|||:::|::|::|a:|:|:|::::|||::|:|"));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //nonbarcode char were used
+	    System.out.println(toZip("|||::::::|::||||:|:|:::::||::|:|"));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //checkSum is wrong
+	    System.out.println(toZip("|||:::|::|::|::|:|:|::::||||:::|"));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //left or right is wrong
+	    System.out.println(toZip(":||:::|::|::|::|:|:|::::||||:::|"));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	try{
+	    //left or right is wrong
+	    System.out.println(toZip("|||:::|::|::|::|:|:|::::||||::::"));
+	}catch(Exception e){
+	    sum+=1;
+	    e.printStackTrace();
+	}
+	System.out.println("\nThere were 17 errors, if youre not interested in type, just look below to make \nsure there are 17 lol\n");
+	System.out.println("The number of errors caught were: "+ sum);
+    }
     
     // instance variables
     private String _zip;
@@ -84,20 +220,19 @@ public class Barcode implements Comparable<Barcode>{
 	}
 	for (int i = 1; i < code.length() - 6; i += 5){
 	    if (findIndex(code.substring(i, i + 5)) == -1){
-		throw new IllegalArgumentException("The barcode has invalid encoded integers.");
+		    throw new IllegalArgumentException("The barcode has invalid encoded integers.");
 	    }
 	}
 	int check_sum = checkSum(code);
 	if (findIndex(code.substring(26, 31)) != check_sum){
 	    throw new IllegalArgumentException("The sixth digit does not match the sum of the first five digits modulo 10.");
 	}
-	int temp = 0;
 	int counter = 0;
-	for (int i = 1; i < code.length() - 3; i += 5){
-	    temp += findIndex(code.substring(i, i + 5)) * Math.pow(10, 4 - counter);
-	    counter ++;
+	String temp = "";
+	for (int i = 1; i < code.length() - 6; i += 5){
+	    temp += findIndex(code.substring(i, i + 5));
 	}
-	return String.valueOf(temp);
+	return temp;
     }
     
 }
