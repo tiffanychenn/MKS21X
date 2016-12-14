@@ -27,7 +27,7 @@ public class Sorts{
 	for (int i = 1; i < data.length; i ++){
 	    int temp = data[i];
 	    int counter = i;
-	    while ((counter > 0) && (temp < data[counter - 1])){
+	    while (counter > 0 && temp < data[counter - 1]){
 		data[counter] = data[counter - 1];
 		counter --;
 	    }
@@ -37,7 +37,7 @@ public class Sorts{
 
     public static void main(String[] args){
 	System.out.println(name());
-	int[] ary = {1802, 10, 38, 1, 4789, 2, 479, 290, 100, 64, 28, 28, 2780};
+	int[] ary = {182, 10, 38, 1, 5, 2, 479, 290, 100, 64, 28, 28, 2780};
 	insertionSort(ary);
 	for (int i = 0; i < ary.length; i ++){
 	    System.out.println(ary[i]);
