@@ -2,7 +2,7 @@ public class Sorts{
     /**EDIT THIS METHOD TO MATCH YOUR NAME 
      */
     public static String name(){
-	return "01.Chen.Tiffany"; 
+	return "06.Chen.Tiffany"; 
     }
 
     /**Selection sort of an int array. 
@@ -35,13 +35,36 @@ public class Sorts{
 	}
     }
 
+    public static void bubbleSort(int[] data){
+	boolean benchmark = true;
+	for (int counter = data.length; counter > 0; counter --){
+	    for (int i = 0; i < counter - 1; i ++){
+	        if (data[i] > data[i + 1]){
+		    int temp = data[i];
+		    data[i] = data[i + 1];
+		    data[i + 1] = temp;
+		    benchmark = false;
+		}
+	    }
+	    if (benchmark){
+		return;
+	    }
+	    else{
+		benchmark = true;
+	    }
+	}
+    }
+
     public static void main(String[] args){
 	System.out.println(name());
 	int[] ary = {182, 10, 38, 1, 5, 2, 479, 290, 100, 64, 28, 28, 2780};
-	insertionSort(ary);
+	long start = System.currentTimeMillis();
+	bubbleSort(ary);
+	long end = System.currentTimeMillis();
 	for (int i = 0; i < ary.length; i ++){
 	    System.out.println(ary[i]);
 	}
+	//	System.out.println("\nTIME:\n" + end + "\n" + start);
     }
 }
 
