@@ -10,10 +10,10 @@ public class Window extends JFrame implements ActionListener{
 
     public void actionPerformed(ActionEvent e){
 	if ("CtoF".equals(e.getActionCommand())){
-	    t.setText(String.valueOf(Temp.CtoF(Integer.parseInt(t.getText()))));
+	    t.setText(String.valueOf(Temp.CtoF(Double.parseDouble(t.getText()))));
 	}
 	else{
-	    t.setText(String.valueOf(Temp.FtoC(Integer.parseInt(t.getText()))));
+	    t.setText(String.valueOf(Temp.FtoC(Double.parseDouble(t.getText()))));
 	}
     }
  

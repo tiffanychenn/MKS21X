@@ -57,14 +57,11 @@ public class Sorts{
 
     public static void main(String[] args){
 	System.out.println(name());
-	int[] ary = {182, 10, 38, 1, 5, 2, 479, 290, 100, 64, 28, 28, 2780};
-	long start = System.currentTimeMillis();
-	bubbleSort(ary);
-	long end = System.currentTimeMillis();
+	int[] ary = {};
+	selectionSort(ary);
 	for (int i = 0; i < ary.length; i ++){
 	    System.out.println(ary[i]);
 	}
-	//	System.out.println("\nTIME:\n" + end + "\n" + start);
     }
 }
 
